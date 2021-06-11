@@ -1,0 +1,25 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build React app using Node 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+    - run: npm ci
+    - run: npm run build
+    - name: Upload ftp
+      uses: sebastianpopp/ftp-action@releases/v2
+      with:
+        host: ${{ secrets.FTP_SERVER }}
+        user: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        localDir: "build"
+        remoteDir: "public_html/team"
