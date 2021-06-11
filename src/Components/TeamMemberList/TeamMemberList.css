@@ -1,0 +1,33 @@
+.para1 {
+    padding-left: 4px;
+}
+
+.para {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.card {
+    height: 400px;
+    background-color: #00adb5;
+}
+
+.Card {
+    height: 420px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.synopsis {
+    font-size: 35;
+}
+
+#teamImage {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    text-align: center;
+}
+
+#img-container {
+    text-align: center;
+}
