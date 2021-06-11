@@ -9,8 +9,9 @@ function Navigationbar() {
             <Navbar fixed="top" className="color-nav" variant="dark">
                 <Navbar.Brand href="https://acmpesuecc.github.io/">
                     <img
-                        alt=""
-                        src="/acm_logo.png"
+                        alt="ACM PESUECC Logo"
+                        // The image path is absolute and relative to the domain and main website
+                        src="/img/acm_logo.png"
                         width="60"
                         height="60"
                         className="d-inline-block align-top"
