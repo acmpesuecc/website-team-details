@@ -31,3 +31,13 @@
 #img-container {
     text-align: center;
 }
+
+.Heading {
+    color: white;
+    text-align: center;
+}
+
+.deets {
+    padding-top: 10px;
+    padding-bottom: 100px;
+}
