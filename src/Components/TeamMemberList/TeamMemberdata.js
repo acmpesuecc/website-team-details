@@ -21,7 +21,7 @@ function TeamMemberData({ teamMemberList = [] }) {
                         <Grid item xs={12} sm={6} md={4} key={i}>
                         <Card style={{ backgroundColor: "#aad8d3" }} className="Card">
                             <CardHeader
-                                title={item["name"]}
+                                title={item["What is your name"]}
                             />
                             <div id="img-container" >
                                 <img
@@ -34,13 +34,13 @@ function TeamMemberData({ teamMemberList = [] }) {
                             <CardContent>
                                 <p className="synopsis">{item["1 small phrase about yourself"]}</p>
                                 <IconButton aria-label="add to favorites">
-                                    <a href={item["Github profile URL"]} ><i className="fab fa-github"></i></a>
+                                    <a href={item["Github profile URL (Ex: https://github.com/srujandeshpande)"]} ><i className="fab fa-github"></i></a>
                                 </IconButton>
                                 <IconButton aria-label="share">
-                                    <a href={item["Linkedin profile URL"]} ><i className="fab fa-linkedin-in"></i></a>
+                                    <a href={item["Linkedin profile URL (Ex: https://www.linkedin.com/in/srujandeshpande/)"]} ><i className="fab fa-linkedin-in"></i></a>
                                 </IconButton>
                                 <IconButton aria-label="share">
-                                    <a href={item["Instagram profile URL"]} ><i className="fab fa-instagram"></i></a>
+                                    <a href={item["Instagram profile URL (Ex: https://instagram.com/srujandeshpande)"]} ><i className="fab fa-instagram"></i></a>
                                 </IconButton>
                             </CardContent>
                         </Card>
