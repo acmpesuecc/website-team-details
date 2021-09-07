@@ -18,14 +18,12 @@ body:
   - type: dropdown
     id: device
     attributes:
-      label: What devide are you seeing the problem on?
+      label: What device are you seeing the problem on?
       multiple: true
       options:
         - Mobile
         - Desktop
         - Tablet
-    validations:
-      required: true
   - type: dropdown
     id: browsers
     attributes:
