@@ -1,110 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import Tabletop from "tabletop";
-import TeamMemberData from './TeamMemberdata';
-import "./TeamMemberList.css"
+import TeamMemberData from './TeamMemberData';
+import './TeamMemberList.css';
 import { makeStyles } from '@material-ui/core/styles';
-import Dropdown from 'react-bootstrap/Dropdown'
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+} from '@material-ui/core';
+import { useQuery } from 'react-query';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebaseSetup';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: 50,
-    paddingRight: 50,
-    paddingTop: 20,
-    textAlign: "center",
-  },
-  media: {
-    height: 300,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
+    root: {
+        padding: '2rem',
+        textAlign: 'center',
+    },
+    media: {
+        height: 300,
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
 }));
 
 function TeamMemberList() {
-  const [data, setData] = useState([]);
-  const classes = useStyles();
+    const [year, setYear] = useState(0);
+    const classes = useStyles();
 
-  useEffect(() => {
-    Tabletop.init({
-      key: "https://docs.google.com/spreadsheets/d/1Rc7BxL1Fgz9U3w63D3G5itCWmIF-P52LzKgmB1inhAw/edit?usp=sharing",
-      simpleSheet: true
-    })
-      .then(
-        (data) => setData(data)
-      )
-      .catch((err) => console.warn(err))
-  }
-    , []);
+    const { isLoading, isError, isRefetching, isFetching, data } = useQuery(
+        'members',
+        () =>
+            getDocs(collection(db, 'members')).then((querySnap) => {
+                return Array(...querySnap.docs.map((item) => item.data()));
+            }),
+        {
+            staleTime: 30000,
+            retry: 3,
+            retryDelay: 1000,
+        }
+    );
 
-  data.sort((a, b) => a["Graduation Year"] - b["Graduation Year"]);
+    useEffect(() => {
+        if (isRefetching || isFetching) {
+            console.log('REFETCHING/FETCHING', data);
+        }
+    });
 
-  const firstYearData = []
-  const secondYearData = []
-  const thirdYearData = []
-
-  for (let i = 0; i < data.length; i++) {
-    if (data[i]["Graduation Year"] === "2024") {
-      firstYearData.push(data[i]);
+    if (isLoading) {
+        return <h1>Loading...</h1>;
     }
-  }
-
-  for (let i = 0; i < data.length; i++) {
-    if (data[i]["Graduation Year"] === "2023") {
-      secondYearData.push(data[i]);
+    if (isError) {
+        return <h1>Error</h1>;
     }
-  }
 
-
-  for (let i = 0; i < data.length; i++) {
-    if (data[i]["Graduation Year"] === "2022") {
-      thirdYearData.push(data[i]);
-    }
-  }
-
-  thirdYearData.sort((a, b) => a.name.localeCompare(b.name))
-  secondYearData.sort((a, b) => a.name.localeCompare(b.name))
-  firstYearData.sort((a, b) => a.name.localeCompare(b.name))
-
-  return (
-    <div className={classes.root}>
-      <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          Year
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item href="#third">2022</Dropdown.Item>
-          <Dropdown.Item href="#second">2023</Dropdown.Item>
-          <Dropdown.Item href="#first">2024</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-      <br />
-      <div className="deets" id="third" >
-        <h1 className="Heading">2022</h1>
-        <TeamMemberData teamMemberList={thirdYearData} />
-        <br />
-      </div>
-      <div className="deets" id="second">
-        <h1 className="Heading">2023</h1>
-        <br />
-        <TeamMemberData teamMemberList={secondYearData.sort()} />
-      </div>
-      <div className="deets" id="first">
-        <h1 className="Heading">2024</h1>
-        <br />
-        <TeamMemberData teamMemberList={firstYearData.sort()} />
-      </div>
-    </div>
-  );
+    return (
+        <div className={classes.root}>
+            <Box sx={{ minWidth: 200 }}>
+                <FormControl>
+                    <InputLabel id='grad-year'>Year</InputLabel>
+                    <Select
+                        labelId='grad-year'
+                        id='grad-year-select'
+                        value={year}
+                        label='Year'
+                        onChange={(e) => {
+                            setYear(e.target.value);
+                        }}>
+                        <MenuItem value={0}>Show All</MenuItem>
+                        <MenuItem value={2022}>2022</MenuItem>
+                        <MenuItem value={2023}>2023</MenuItem>
+                        <MenuItem value={2024}>2024</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+            <br />
+            <TeamMemberData
+                teamMemberList={
+                    year ? data.filter((item) => item.gradYear === year) : data
+                }
+            />
+        </div>
+    );
 }
 
 export default TeamMemberList;
