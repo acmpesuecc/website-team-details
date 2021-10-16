@@ -1,3 +1,29 @@
-.color-nav {
+.navbar {
     background-color: black;
+    padding: 1rem 2rem;
+    color: #77bde8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+.flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar ul {
+    list-style: none;
+    list-style-type: none;
+}
+
+.navbar ul li a {
+    color: #77bde8;
+    border: 1px solid #77bde8;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
 }
